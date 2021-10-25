@@ -1,4 +1,4 @@
-version: 0.0.9
+version: 0.0.10
 
 branches:
   only:
@@ -29,6 +29,7 @@ build_script: |
   cd ..
   set PATH=C:\Program Files\PostgreSQL\10\bin;%PATH%
   mugideploy collect --bin app\release\app.exe --no-vcredist --plugins qsqlite qsqlmysql qsqlodbc qsqlpsql
+  7z a app-0.0.1-win64.zip app-0.0.1-win64
 
 cache:
   - C:\projects\mysql-8.0.27-winx64.zip
