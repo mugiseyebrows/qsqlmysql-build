@@ -1,4 +1,4 @@
-version: 0.0.2
+version: 0.0.3
 
 branches:
   only:
@@ -7,6 +7,7 @@ branches:
 build_script: |
   echo %APPVEYOR_BUILD_FOLDER%
   call env vc python qt5 jom qwt git
+  type env.bat
   cd ..
   if not exist mysql-8.0.27-winx64.zip echo not exist
   if not exist mysql-8.0.27-winx64.zip curl -L -o mysql-8.0.27-winx64.zip https://cdn.mysql.com/Downloads/MySQL-8.0/mysql-8.0.27-winx64.zip
