@@ -1,0 +1,23 @@
+version: 0.0.1
+
+branches:
+  only:
+    - main
+    
+build_script: |
+  echo %APPVEYOR_BUILD_FOLDER%
+  call env vc python qt5 jom qwt git
+  cd ..
+  if not exist mysql-8.0.27-winx64.zip echo not exist
+  if not exist mysql-8.0.27-winx64.zip curl -L -o mysql-8.0.27-winx64.zip https://cdn.mysql.com/Downloads/MySQL-8.0/mysql-8.0.27-winx64.zip
+  7z x -y mysql-8.0.27-winx64.zip
+  git clone -b 5.14.2 --single-branch --depth=1 git://code.qt.io/qt/qtbase.git
+  cd qtbase\src\plugins\sqldrivers
+  qmake -- MYSQL_INCDIR="C:/projects/mysql-8.0.27-winx64/include" MYSQL_LIBDIR="C:/projects/mysql-8.0.27-winx64/lib"
+  cd mysql
+  qmake
+  jom install
+
+cache:
+  - C:\projects\mysql-8.0.27-winx64.zip
+  - C:\projects\mysql-8.0.27-winx64
