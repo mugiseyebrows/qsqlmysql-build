@@ -1,4 +1,4 @@
-version: 0.0.7
+version: 0.0.8
 
 branches:
   only:
@@ -11,6 +11,7 @@ artifacts:
 build_script: |
   call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat"
   set PATH=C:\Qt\5.14.2\msvc2017_64\bin;C:\Qt\Tools\QtCreator\bin\jom;C:\Python39-x64;C:\Python39-x64\Scripts;%PATH%
+  python -m pip install mugideploy
   cd ..
   if not exist mysql-8.0.27-winx64.zip echo not exist
   if not exist mysql-8.0.27-winx64.zip curl -L -o mysql-8.0.27-winx64.zip https://cdn.mysql.com/Downloads/MySQL-8.0/mysql-8.0.27-winx64.zip
