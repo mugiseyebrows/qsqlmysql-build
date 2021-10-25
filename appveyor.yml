@@ -1,13 +1,12 @@
-version: 0.0.5
+version: 0.0.6
 
 branches:
   only:
     - main
     
 build_script: |
-  echo %APPVEYOR_BUILD_FOLDER%
-  type env.bat
-  call env vc python qt5 jom qwt git
+  call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat"
+  set PATH=C:\Qt\5.14.2\msvc2017_64\bin;C:\Qt\Tools\QtCreator\bin\jom;%PATH%
   cd ..
   if not exist mysql-8.0.27-winx64.zip echo not exist
   if not exist mysql-8.0.27-winx64.zip curl -L -o mysql-8.0.27-winx64.zip https://cdn.mysql.com/Downloads/MySQL-8.0/mysql-8.0.27-winx64.zip
