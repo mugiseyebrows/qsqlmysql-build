@@ -1,23 +1,40 @@
-version: 0.0.6
+version: 0.0.7
 
 branches:
   only:
     - main
     
+artifacts:
+  - path: app-0.0.1-win64.zip
+    name: dist
+
 build_script: |
   call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat"
-  set PATH=C:\Qt\5.14.2\msvc2017_64\bin;C:\Qt\Tools\QtCreator\bin\jom;%PATH%
+  set PATH=C:\Qt\5.14.2\msvc2017_64\bin;C:\Qt\Tools\QtCreator\bin\jom;C:\Python39-x64;C:\Python39-x64\Scripts;%PATH%
   cd ..
   if not exist mysql-8.0.27-winx64.zip echo not exist
   if not exist mysql-8.0.27-winx64.zip curl -L -o mysql-8.0.27-winx64.zip https://cdn.mysql.com/Downloads/MySQL-8.0/mysql-8.0.27-winx64.zip
   7z x -y mysql-8.0.27-winx64.zip
-  git clone -b 5.14.2 --single-branch --depth=1 git://code.qt.io/qt/qtbase.git
+  git clone -q --branch 5.14.2 --single-branch --depth=1 git://code.qt.io/qt/qtbase.git
   cd qtbase\src\plugins\sqldrivers
   qmake -- MYSQL_INCDIR="C:/projects/mysql-8.0.27-winx64/include" MYSQL_LIBDIR="C:/projects/mysql-8.0.27-winx64/lib"
   cd mysql
   qmake
   jom install
+  set PATH=C:\projects\mysql-8.0.27-winx64\lib;%PATH%
+  cd %APPVEYOR_BUILD_FOLDER%\app
+  qmake
+  jom release
+  cd ..
+  mugideploy collect --bin app\release\app.exe --no-vcredist --plugins qsqlite qsqlmysql qsqlodbc qsqlpsql
 
 cache:
   - C:\projects\mysql-8.0.27-winx64.zip
-  - C:\projects\mysql-8.0.27-winx64
+
+deploy:
+  description: 'qwt-build'
+  provider: GitHub
+  auth_token:
+    secure: jBN4dQaXdrv9SsDZGZXuGQJ9LlP+jPRXFq++Sbt+qo1dTFGiTIGemBMEazWuPAxc
+  on:
+    branch: main
