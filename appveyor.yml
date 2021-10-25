@@ -1,4 +1,4 @@
-version: 0.0.8
+version: 0.0.9
 
 branches:
   only:
@@ -27,6 +27,7 @@ build_script: |
   qmake
   jom release
   cd ..
+  set PATH=C:\Program Files\PostgreSQL\10\bin;%PATH%
   mugideploy collect --bin app\release\app.exe --no-vcredist --plugins qsqlite qsqlmysql qsqlodbc qsqlpsql
 
 cache:
